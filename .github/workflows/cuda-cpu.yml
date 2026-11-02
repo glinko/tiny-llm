@@ -1,0 +1,33 @@
+name: CUDA course (CPU reference smoke)
+
+on:
+  push:
+    branches:
+      - course/cuda
+  pull_request:
+    paths:
+      - "src/tiny_llm_cuda/**"
+      - "src/tiny_llm_cuda_ref/**"
+      - "tests_cuda/**"
+      - "requirements-cuda.txt"
+      - ".github/workflows/cuda-cpu.yml"
+
+jobs:
+  reference-week1-day1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install CPU reference dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -r requirements-cuda.txt
+      - name: Verify reference solution for Week 1 Day 1
+        env:
+          PYTHONPATH: src
+          TINY_LLM_CUDA_SOLUTION: ref
+          CUDA_VISIBLE_DEVICES: ""
+        run: python -m pytest -q tests_cuda/test_week_1_day_1.py
