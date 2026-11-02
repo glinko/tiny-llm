@@ -1,0 +1,4 @@
+# Install the CUDA-enabled PyTorch wheel FIRST, using the official Linux selector:
+# https://pytorch.org/get-started/locally/
+# Deliberately do not pin torch here: its wheel must match the host NVIDIA driver.
+pytest>=8,<10
